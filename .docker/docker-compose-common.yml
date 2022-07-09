@@ -1,0 +1,31 @@
+version: '3.3'
+
+networks:
+  frontend:
+    driver: ${NETWORKS_DRIVER}
+  backend:
+    driver: ${NETWORKS_DRIVER}
+
+services:
+
+  ### FPM #########################################
+  application-fpm:
+    container_name: application-fpm
+    image: $IMAGE_PREFIX/phpfpm:web-$IMAGE_TAG
+    build:
+      context: ./application-fpm
+      args:
+        - PHP_VERSION=${PHP_VERSION}
+        - APP_ENV=${APP_ENV}
+        - XDEBUG=${XDEBUG}
+        - REDIS=${REDIS}
+        - DATADOG=${DATADOG}
+    volumes:
+      - ./application-fpm/php${PHP_VERSION}.${APP_ENV}.ini:/usr/local/etc/php/php.ini
+      - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
+    environment:
+      - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
+    expose:
+      - '9000'
+    networks:
+      - backend

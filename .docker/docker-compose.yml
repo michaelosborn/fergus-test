@@ -1,0 +1,36 @@
+version: '3.3'
+
+networks:
+#  frontend:
+#    driver: ${NETWORKS_DRIVER}
+  backend:
+    driver: ${NETWORKS_DRIVER}
+
+volumes:
+  docker-in-docker:
+      driver: ${VOLUMES_DRIVER}
+
+services:
+    ### APPLICATION #########################################
+    application:
+        container_name: application
+        image: $IMAGE_PREFIX/dashboard:$IMAGE_TAG
+        build:
+            context: ./application
+            args:
+                - APPLICATION_BUILDER=$IMAGE_PREFIX/dashboard:builder-$IMAGE_TAG
+        volumes:
+            - ${APP_CODE_PATH_HOST}:/var/www
+        depends_on:
+            - application-builder
+
+    ### APPLICATION BUILDER #########################################
+    application-builder:
+        container_name: application-builder
+        image: $IMAGE_PREFIX/dashboard:builder-$IMAGE_TAG
+        build:
+            context: ../
+            dockerfile: ./docker/application-builder/Dockerfile
+            args:
+              - APPLICATION_SOURCE_FOLDER=${APPLICATION_SOURCE_FOLDER}
+              - BUILD_RELEASE_SCRIPT=./scripts/build-release.sh
