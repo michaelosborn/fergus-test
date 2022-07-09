@@ -56,19 +56,19 @@ Folder : app/Http/Requests
 Laravel requests are a class that get injected into a controller function in the request pipeline, 
 they are used, for the most part, as a way to preform validation in the request pipeline before hitting the controller  function.  
 
-###Controllers
+### Controllers
 Folder : app/Http/Controllers
 
-###Services
+### Services
 Folder : app/Services
 
-###Repositories
+### Repositories
 Folder : app/Repositories
 
-###Resources
+### Resources
 Folder : app/Resources
 
 JsonResource are used a bit dto's with a few helper methods to do some voodoo magic transformations. 
-###Contracts
+### Contracts
 Folder : app/Contracts
 
